@@ -165,7 +165,8 @@ async def wait_for_ready(self:JsCDP, timeout=10, idle_ms=500):
     deadline = asyncio.get_event_loop().time() + timeout
     while asyncio.get_event_loop().time() < deadline:
         async with self.on('Network.requestWillBeSent') as q:
-            if not await q(idle_ms/1000): return
+            r = await q(idle_ms/1000)
+            if not r or r.get('js_status')=='timeout': return
     raise TimeoutError('Timed out waiting for network idle')
 
 @patch
