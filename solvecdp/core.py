@@ -156,7 +156,7 @@ async def wait_for_selector(self:JsCDP, sel, timeout=10):
 @patch
 async def eval(self:JsCDP, expr):
     res = await self.runtime.evaluate(expression=expr)
-    return res['value'] if res else res
+    return res.get("value") if res else res
 
 # %% ../nbs/00_core.ipynb #9814014d
 @patch
