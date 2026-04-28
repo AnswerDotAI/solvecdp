@@ -1,0 +1,62 @@
+[
+  {
+    "objectID": "core.html",
+    "href": "core.html",
+    "title": "SolveitCDP API",
+    "section": "",
+    "text": "from fastcore.test import test_eq\nlen(_cdp_domains), [d['domain'] for d in _cdp_domains[:5]]\n\n(55, ['Accessibility', 'Animation', 'Audits', 'Autofill', 'BackgroundService'])\nsource",
+    "crumbs": [
+      "SolveitCDP API"
+    ]
+  },
+  {
+    "objectID": "core.html#llms-and-accessibility",
+    "href": "core.html#llms-and-accessibility",
+    "title": "SolveitCDP API",
+    "section": "LLMs and accessibility",
+    "text": "LLMs and accessibility\n\npage = await JsCDP.new(url='https://httpbin.org/forms/post')\nawait page.eval('document.title')\n\n'5. httpbin.org/forms/post'\n\n\n\nawait page.accessibility.enable()\ntree = await page.accessibility.getFullAXTree()\nlen(tree)\n\n90\n\n\n\ntree[0]\n\n{ 'backendDOMNodeId': 14,\n  'childIds': ['15'],\n  'chromeRole': {'type': 'internalRole', 'value': 144},\n  'frameId': '92354B6BB2A591B3DDB0267C24E21365',\n  'ignored': False,\n  'name': { 'sources': [{'attribute': 'aria-labelledby', 'type': 'relatedElement'}, {'attribute': 'aria-label', 'type': 'attribute'}, {'attribute': 'aria-label', 'superseded': True, 'type': 'attribute'}, {'nativeSource': 'title', 'type': 'relatedElement', 'value': {'type': 'computedString', 'value': '5. httpbin.org/forms/post'}}],\n            'type': 'computedString',\n            'value': '5. httpbin.org/forms/post'},\n  'nodeId': '14',\n  'properties': [{'name': 'focusable', 'value': {'type': 'booleanOrUndefined', 'value': True}}, {'name': 'url', 'value': {'type': 'string', 'value': 'https://httpbin.org/forms/post'}}],\n  'role': {'type': 'internalRole', 'value': 'RootWebArea'}}\n\n\n\nawait page.close()\n\n\nsource\n\nAXTree\n\ndef AXTree(\n    raw\n):\n\nChrome accessibility tree node with compact repr\n\nsource\n\n\nAXNode\n\ndef AXNode(\n    raw\n):\n\nChrome accessibility tree node with compact repr\n\nsource\n\n\nbuild_ax_tree\n\ndef build_ax_tree(\n    nodes\n):\n\nBuild AXNode tree from flat CDP accessibility node list\n\nsource\n\n\nJsCDP.ax_tree\n\nasync def ax_tree(\n    sid:NoneType=None\n):\n\nGet accessibility tree for session\n\npage = await JsCDP.new(url='https://httpbin.org/forms/post')\n\n\nroot = await page.ax_tree()\nroot\n\n\n\nRootWebArea “5. httpbin.org/forms/post” focusable=True url=https://httpbin.org/forms/post [#14]\n\nLabelText “” [#20]\n\nStaticText “Customer name:” [#62]\n\nInlineTextBox “Customer name:”\n\ntextbox “Customer name:” focusable=True editable=plaintext settable=True [#2]\n\nLabelText “” [#23]\n\nStaticText “Telephone:” [#63]\n\nInlineTextBox “Telephone:”\n\ntextbox “Telephone:” focusable=True editable=plaintext settable=True [#3]\n\nLabelText “” [#26]\n\nStaticText “E-mail address:” [#64]\n\nInlineTextBox “E-mail address:”\n\ntextbox “E-mail address:” focusable=True editable=plaintext settable=True [#4]\n\ngroup “Pizza Size” [#28]\n\nLegend “” [#29]\n\nStaticText “Pizza Size” [#65]\n\nInlineTextBox “Pizza Size”\n\n\nradio ” Small” focusable=True [#6]\nradio ” Medium” focusable=True [#7]\nradio ” Large” focusable=True [#8]\n\ngroup “Pizza Toppings” [#36]\n\nLegend “” [#37]\n\nStaticText “Pizza Toppings” [#69]\n\nInlineTextBox “Pizza Toppings”\n\n\ncheckbox ” Bacon” focusable=True [#9]\ncheckbox ” Extra Cheese” focusable=True [#10]\ncheckbox ” Onion” focusable=True [#11]\ncheckbox ” Mushroom” focusable=True [#12]\n\nLabelText “” [#47]\n\nStaticText “Preferred delivery time:” [#74]\n\nInlineTextBox “Preferred delivery time:”\n\nInputTime “Preferred delivery time:” focusable=True settable=True [#13]\n\nspinbutton “Hours Hours” focusable=True settable=True valuemin=1 valuemax=12 [#51]\n\nStaticText “–” [#75]\n\nInlineTextBox “–”\n\n\nStaticText “:” [#76]\n\nInlineTextBox “:”\n\nspinbutton “Minutes Minutes” focusable=True settable=True valuemax=59 [#53]\n\nStaticText “–” [#77]\n\nInlineTextBox “–”\n\n\nStaticText ” ” [#78]\n\nInlineTextBox ” ”\n\nspinbutton “AM/PM AM/PM” focusable=True settable=True valuemin=1 valuemax=2 [#55]\n\nStaticText “–” [#79]\n\nInlineTextBox “–”\n\n\nbutton “Show time picker” focusable=True hasPopup=menu [#56]\n\n\nLabelText “” [#58]\n\nStaticText “Delivery instructions:” [#80]\n\nInlineTextBox “Delivery instructions:”\n\ntextbox “Delivery instructions:” focusable=True editable=plaintext settable=True multiline=True [#5]\n\nbutton “Submit order” focusable=True [#61]\n\nStaticText “Submit order” [#81]\n\nInlineTextBox “Submit order”\n\n\n\n\n\n\n\n\nsource\n\n\nAXNode.find_all\n\ndef find_all(\n    role:NoneType=None, name:NoneType=None\n):\n\nFind all descendants matching role and/or name substring\n\nsource\n\n\nAXNode.find_id\n\ndef find_id(\n    role:NoneType=None, name:NoneType=None\n):\n\nFind first descendant matching role and/or name substring\n\nsource\n\n\nAXNode.find\n\ndef find(\n    role:NoneType=None, name:NoneType=None\n):\n\nFind first descendant matching role and/or name substring\n\nnmid = root.find_id('textbox', 'Customer name')\nphid = root.find_id('textbox', 'Telephone')\nnmid\n\n2\n\n\n\nsource\n\n\nJsCDP.click\n\nasync def click(\n    backendNodeId, sid:NoneType=None\n):\n\nCall self as a function.\n\nsource\n\n\nJsCDP.js_node_run\n\nasync def js_node_run(\n    code, backendNodeId, sid:NoneType=None\n):\n\nCall self as a function.\n\nsource\n\n\nJsCDP.js_node\n\nasync def js_node(\n    fn, backendNodeId, sid:NoneType=None\n):\n\nCall self as a function.\n\nawait page.DOM.focus(backendNodeId=nmid)\nawait page.input.insertText(text='Jeremy Howard')\n\nawait page.DOM.focus(backendNodeId=phid)\nawait page.input.insertText(text='555-1234')\n\n{}\n\n\n\nawait page.click(root.find_id('radio', 'Large'))\nawait page.click(root.find_id('checkbox', 'Extra Cheese'))\n\n\nsource\n\n\nJsCDP.fill_text\n\nasync def fill_text(\n    backendNodeId, text, sid:NoneType=None\n):\n\nCall self as a function.\n\nawait page.fill_text(root.find_id('textbox', 'Delivery'), 'Ring the doorbell twice')\n\n\nawait page.js_node_run('this.value = \"18:30\"', root.find_id('InputTime', 'delivery time'));\n\n\nsource\n\n\nJsCDP.click_and_wait\n\nasync def click_and_wait(\n    backendNodeId, kwargs:VAR_KEYWORD\n):\n\nClick element and wait for load+idle\n\nawait page.click_and_wait(root.find_id('button', 'Submit order'))\n\n\nsource\n\n\ncdp_yolo\n\ndef cdp_yolo(\n    \n):\n\nAllow all CDP classes in safepyrun",
+    "crumbs": [
+      "SolveitCDP API"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "solvecdp",
+    "section": "",
+    "text": "fastcdp provides an async Python client for the Chrome DevTools Protocol (CDP) over solveit’s js bridge. It exposes every CDP domain as a Python attribute with auto-generated signatures and docstrings — e.g. await cdp.page.navigate(url=...).\nIt includes event subscription via cdp.on()/cdp.wait_event(), navigation helpers (goto, wait_for_selector, wait_for), screenshot capture, and accessibility tree access. A cdp_search utility lets you search CDP commands by name or description. For use inside safepyrun sandboxes, cdp_yolo() registers all CDP classes.",
+    "crumbs": [
+      "solvecdp"
+    ]
+  },
+  {
+    "objectID": "index.html#installation",
+    "href": "index.html#installation",
+    "title": "solvecdp",
+    "section": "Installation",
+    "text": "Installation\nYou must install the solveit-chrome extension before using solvecdp.\nSolveit already has solvecdp installed, but if you want to install the latest you can get it from pypi:\n$ pip install solvecdp",
+    "crumbs": [
+      "solvecdp"
+    ]
+  },
+  {
+    "objectID": "index.html#how-to-use",
+    "href": "index.html#how-to-use",
+    "title": "solvecdp",
+    "section": "How to use",
+    "text": "How to use\n\nfrom solvecdp import *\n\n\nThe JsCDP class\nEvery CDP domain is available as an attribute with auto-generated signatures. You can search for commands with cdp_search:\n\ncdp_search('screenshot')\n\n\"Emulation.setVisibleSize: Resizes the frame/viewport of the page. Note that this does not affect the frame's container\\n(e.g. browser window). Can \\nHeadlessExperimental.beginFrame: Sends a BeginFrame to the target and returns when the frame was completed. Optionally captures a\\nscreenshot from the res\\n  evt Overlay.screenshotRequested: Fired when user asks to capture screenshot of some area on the page.\\nPage.captureScreenshot: Capture page screenshot.\"\n\n\nCreate a new page:\n\njc = await JsCDP.new()\n\nGo to a page:\n\nawait jc.goto('https://httpbin.org/forms/post')\n\nEval js:\n\nawait jc.eval('document.title')\n\n'6. httpbin.org/forms/post'\n\n\nOr you can wait_for any js expression to be truthy, and have it returned:\n\nawait jc.wait_for('document.title')\n\n'6. httpbin.org/forms/post'\n\n\nTake a screenshot of the page:\n\nimg = await jc.screenshot()\n\nClean up when done:\n\nawait jc.close()\n\nSee JsCDP docs for full details.",
+    "crumbs": [
+      "solvecdp"
+    ]
+  },
+  {
+    "objectID": "index.html#filling-forms",
+    "href": "index.html#filling-forms",
+    "title": "solvecdp",
+    "section": "Filling forms",
+    "text": "Filling forms\n\npage = await JsCDP.new(url='https://httpbin.org/forms/post')\n\nFor finding elements to interact with, use ax_tree:\n\nroot = await page.ax_tree()\nprint(str(root)[:300])\n\n- **RootWebArea** \"6. httpbin.org/forms/post\" `focusable=True` `url=https://httpbin.org/forms/post` [#14]\n  - **LabelText** \"\" [#20]\n    - **StaticText** \"Customer name: \" [#62]\n      - **InlineTextBox** \"Customer name: \"\n    - **textbox** \"Customer name: \" `focusable=True` `editable=plaintext` `set\n\n\nfind and find_id are used to identify elements in the tree:\n\nnmid = root.find_id('textbox', 'Customer name')\nnmid\n\n2\n\n\nYou can use regular CDP methods, or one of the provided shortcuts:\n\nawait page.fill_text(nmid, 'Jeremy Howard')\nawait page.click(root.find_id('radio', 'Large'))\nawait page.js_node_run('this.value = \"18:30\"', root.find_id('InputTime', 'delivery time'));\n\nYou can use click to click a button, or click_and_wait to wait for the next page to load:\n\nawait page.click_and_wait(root.find_id('button', 'Submit order'))\n\n\nawait page.close()\n\nTo allow LLMs like solveit with safepyrun to access solvecdp, use:\ncdp_yolo()\nThen use a prompt such as:\n\nTry using pyrun to create a page_ JsCDP object, then goto &lt;url&gt;, fill it out, read it to check it’s filled correctly, then submit it, and see what you get back. Don’t use find_id - you can get all the ids at once with ax_tree (don’t truncate the result of it). Don’t add extra waits etc - solvecdp handles it automatically. IDs can change so be sure to use the ax_tree IDs you read.",
+    "crumbs": [
+      "solvecdp"
+    ]
+  }
+]
