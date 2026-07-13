@@ -17,6 +17,7 @@ classifiers = [
 ]
 dependencies = [
   "dialoghelper",
+  "fastcdp>=0.0.7",
   "fastcore"
 ]
 
