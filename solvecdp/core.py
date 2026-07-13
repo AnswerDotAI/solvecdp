@@ -21,6 +21,7 @@ class JsCDP(ExtCDP):
         chan='cdp', # Relay channel name the extension serves
         debug=None # Print events as they arrive?
     ):
+        "Connect to channel"
         return await super().connect(await Channel.connect(chan), debug=debug)
 
 # %% ../nbs/00_core.ipynb #8fbd7193
