@@ -1,0 +1,52 @@
+[
+  {
+    "objectID": "core.html",
+    "href": "core.html",
+    "title": "SolveitCDP API",
+    "section": "",
+    "text": "from fastcore.test import test_eq\n\nsolvecdp relies on the solveit-chrome extension being available - let’s check it:\n\ntest_eq((await event_get_a('ext-ping')).result, 'pong')\n\n\n\nsource\n\nJsCDP\ndef JsCDP(\n    wsconn:str=None, debug:bool=False, command_timeout:float=10\n):\nCDP over the solveit-chrome extension: frames relayed via solveit’s /wsx channel\n\n\nEverything else comes from fastcdp.ext’s ExtCDP: the sessionId↔︎tabId mapping, the lifecycle actions, and new_page/attach_page/pages. JsCDP just supplies the channel, meeting the extension at this solveit’s /wsx relay instead of listening on a local port (a solveit kernel usually runs in a container that the user’s browser can’t reach, so both sides dial out to the relay).\nConnect, open a tab, and drive it. goto, eval, and friends are all inherited from fastcdp through the Page proxy:\n\ncdp = await JsCDP.connect()\npage = await cdp.new_page()\nawait page.goto('https://httpbingo.org/forms/post')\nawait page.eval('document.title')\n\n\nassert 'httpbingo.org' in await page.eval('document.title')\nassert first(await cdp.pages, lambda t: 'httpbingo' in t.get('url',''))\n\nThe accessibility tree and form helpers also come straight from fastcdp: find elements with ax_tree/find_id, then fill_text, click, select_option, and click_and_wait.\n\nroot = await page.ax_tree()\nawait page.fill_text(root.find_id('textbox', 'Customer name'), 'Jeremy Howard')\nawait page.click(root.find_id('radio', 'Large'))\nawait page.click(root.find_id('checkbox', 'Extra Cheese'))\n\n\nawait page.click_and_wait(root.find_id('button', 'Submit order'))\nassert 'Jeremy Howard' in await page.eval('document.body.innerText')\n\nThe debugging buffers work too, since every chrome.debugger event is streamed over the channel and dispatched by the inherited machinery:\n\nawait page.start_console()\nawait page.eval(r'console.warn(\"watch out\")')\ntest_eq(await page.console(r'watch'), ['warning: watch out'])\n\n\nawait page.close()\nawait cdp.close()\n\n\n\nsource\n\ncdp_yolo\ndef cdp_yolo():\nAllow all CDP classes in safepyrun",
+    "crumbs": [
+      "SolveitCDP API"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "solvecdp",
+    "section": "",
+    "text": "solvecdp is fastcdp for solveit: the same async Python client for the Chrome DevTools Protocol, but driving the user’s own browser from a solveit kernel. Every CDP domain is a Python attribute with auto-generated signatures and docstrings, plus event subscription, navigation and form helpers, accessibility tree access, and console/network/dialog debugging buffers. Since the kernel runs on a remote server, frames are relayed through solveit’s /wsx websocket channel to the solveit-chrome extension, which executes them with chrome.debugger.",
+    "crumbs": [
+      "solvecdp"
+    ]
+  },
+  {
+    "objectID": "index.html#installation",
+    "href": "index.html#installation",
+    "title": "solvecdp",
+    "section": "Installation",
+    "text": "Installation\nYou must install the solveit-chrome extension before using solvecdp.\nSolveit already has solvecdp installed, but if you want to install the latest you can get it from pypi:\n$ pip install solvecdp",
+    "crumbs": [
+      "solvecdp"
+    ]
+  },
+  {
+    "objectID": "index.html#how-to-use",
+    "href": "index.html#how-to-use",
+    "title": "solvecdp",
+    "section": "How to use",
+    "text": "How to use\n\nfrom solvecdp import *\n\n\nThe JsCDP class\nEvery CDP domain is available as an attribute with auto-generated signatures. You can search for commands with cdp_search:\n\ncdp_search('screenshot')\n\n\"Emulation.setVisibleSize: Resizes the frame/viewport of the page. Note that this does not affect the frame's container\\n(e.g. browser window). Can \\nHeadlessExperimental.beginFrame: Sends a BeginFrame to the target and returns when the frame was completed. Optionally captures a\\nscreenshot from the res\\n  evt Overlay.screenshotRequested: Fired when user asks to capture screenshot of some area on the page.\\nPage.captureScreenshot: Capture page screenshot.\"\n\n\nConnect (one connection per browser), then open a tab:\n\ncdp = await JsCDP.connect()\npage = await cdp.new_page()\n\nGo to a page:\n\nawait page.goto('https://httpbingo.org/forms/post')\n\nEval js:\n\nawait page.eval('document.title')\n\n'6. httpbin.org/forms/post'\n\n\nOr you can wait_for any js expression to be truthy, and have it returned:\n\nawait page.wait_for('document.title')\n\n'6. httpbin.org/forms/post'\n\n\nTake a screenshot of the page:\n\nimg = await page.screenshot()\n\nClean up when done:\n\nawait page.close()\n\nSee JsCDP docs for full details.",
+    "crumbs": [
+      "solvecdp"
+    ]
+  },
+  {
+    "objectID": "index.html#filling-forms",
+    "href": "index.html#filling-forms",
+    "title": "solvecdp",
+    "section": "Filling forms",
+    "text": "Filling forms\n\npage = await cdp.new_page(url='https://httpbingo.org/forms/post')\n\nFor finding elements to interact with, use ax_tree:\n\nroot = await page.ax_tree()\nprint(str(root)[:300])\n\n- **RootWebArea** \"6. httpbin.org/forms/post\" `focusable=True` `url=https://httpbin.org/forms/post` [#14]\n  - **LabelText** \"\" [#20]\n    - **StaticText** \"Customer name: \" [#62]\n      - **InlineTextBox** \"Customer name: \"\n    - **textbox** \"Customer name: \" `focusable=True` `editable=plaintext` `set\n\n\nfind and find_id are used to identify elements in the tree:\n\nnmid = root.find_id('textbox', 'Customer name')\nnmid\n\n2\n\n\nYou can use regular CDP methods, or one of the provided shortcuts:\n\nawait page.fill_text(nmid, 'Jeremy Howard')\nawait page.click(root.find_id('radio', 'Large'))\nawait page.js_node_run('this.value = \"18:30\"', root.find_id('InputTime', 'delivery time'));\n\nYou can use click to click a button, or click_and_wait to wait for the next page to load:\n\nawait page.click_and_wait(root.find_id('button', 'Submit order'))\n\n\nawait page.close()\n\n\nawait cdp.close()\n\nTo allow LLMs like solveit with safepyrun to access solvecdp, use:\ncdp_yolo()\nThen use a prompt such as:\n\nTry using python to connect a cdp_ JsCDP object and open a page_ tab with new_page, then goto &lt;url&gt;, fill it out, read it to check it’s filled correctly, then submit it, and see what you get back. Don’t use find_id - you can get all the ids at once with ax_tree (don’t truncate the result of it). Don’t add extra waits etc - solvecdp handles it automatically. IDs can change so be sure to use the ax_tree IDs you read.",
+    "crumbs": [
+      "solvecdp"
+    ]
+  }
+]
