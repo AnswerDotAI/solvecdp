@@ -16,7 +16,6 @@ classifiers = [
     "Programming Language :: Python :: 3 :: Only",
 ]
 dependencies = [
-  "dialoghelper>=0.2.45",
   "fastcdp>=0.0.7",
   "fastcore"
 ]

@@ -2,8 +2,13 @@ project:
   output-dir: _docs
 
 website:
-  title: "fastcdp"
-  site-url: "https://AnswerDotAI.github.io/fastcdp"
-  description: "Lightweight Chrome Debug Protocol (CDP) client for python"
+  title: "solvecdp"
+  site-url: "https://AnswerDotAI.github.io/solvecdp"
+  description: "Lightweight Chrome Debug Protocol (CDP) client for solveit"
   repo-branch: main
-  repo-url: "https://github.com/AnswerDotAI/fastcdp"
+  repo-url: "https://github.com/AnswerDotAI/solvecdp"
+
+format-links:
+  - html
+  - format: commonmark
+    text: Markdown
