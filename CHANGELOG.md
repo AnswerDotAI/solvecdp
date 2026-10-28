@@ -2,6 +2,14 @@
 
 <!-- do not remove -->
 
+## 0.0.7
+
+### New Features
+
+- Add standalone Channel class for /wsx relay messaging, dropping dialoghelper dependency ([#7](https://github.com/AnswerDotAI/solvecdp/issues/7))
+- Require dialoghelper>=0.2.45 for solveit-chrome extension ping check ([#6](https://github.com/AnswerDotAI/solvecdp/issues/6))
+
+
 ## 0.0.6
 
 ### New Features
@@ -19,4 +27,3 @@
 ## 0.0.4
 
 - init release
-
