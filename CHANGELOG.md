@@ -4,6 +4,10 @@
 
 ## 0.0.8
 
+### New Features
+
+- Send `AAI_USER_KEY` as X-Api-Token header in Channel.connect ([#8](https://github.com/AnswerDotAI/solvecdp/issues/8))
+
 
 ## 0.0.7
 
