@@ -27,7 +27,8 @@ class Channel:
     ):
         "Connect to `chan` and start reading frames"
         self = cls(chan, url=url)
-        self._ws = await websockets.connect(self.url)
+        headers = {'X-Api-Token': key} if (key := os.getenv('AAI_USER_KEY')) else None
+        self._ws = await websockets.connect(self.url, additional_headers=headers)
         self._reader = asyncio.create_task(self._read_loop())
         return self
 

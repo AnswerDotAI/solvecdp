@@ -17,7 +17,8 @@ classifiers = [
 ]
 dependencies = [
   "fastcdp>=0.0.7",
-  "fastcore"
+  "fastcore",
+  "websockets>=14"
 ]
 
 [project.urls]
