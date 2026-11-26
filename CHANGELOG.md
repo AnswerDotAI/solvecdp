@@ -2,6 +2,13 @@
 
 <!-- do not remove -->
 
+## 0.0.9
+
+### New Features
+
+- Switch Channel relay to rustygate /api/wsx with bearer auth and add osa/aosa AppleScript helpers for solvebridge ([#9](https://github.com/AnswerDotAI/solvecdp/issues/9))
+
+
 ## 0.0.8
 
 ### New Features
