@@ -15,4 +15,9 @@ d = { 'settings': { 'branch': 'main',
                                'solvecdp.core.Channel.send': ('core.html#channel.send', 'solvecdp/core.py'),
                                'solvecdp.core.JsCDP': ('core.html#jscdp', 'solvecdp/core.py'),
                                'solvecdp.core.JsCDP.connect': ('core.html#jscdp.connect', 'solvecdp/core.py'),
-                               'solvecdp.core.cdp_yolo': ('core.html#cdp_yolo', 'solvecdp/core.py')}}}
+                               'solvecdp.core._run_sync': ('core.html#_run_sync', 'solvecdp/core.py'),
+                               'solvecdp.core._wait_bridge': ('core.html#_wait_bridge', 'solvecdp/core.py'),
+                               'solvecdp.core._wait_hello': ('core.html#_wait_hello', 'solvecdp/core.py'),
+                               'solvecdp.core.aosa': ('core.html#aosa', 'solvecdp/core.py'),
+                               'solvecdp.core.cdp_yolo': ('core.html#cdp_yolo', 'solvecdp/core.py'),
+                               'solvecdp.core.osa': ('core.html#osa', 'solvecdp/core.py')}}}
